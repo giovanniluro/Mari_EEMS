@@ -1,11 +1,7 @@
-import './App.css'
-import CSVUploader from './components/main'
+import CSVUploader from "./components/main";
 
 function App() {
-
-  return (
-      <CSVUploader />
-  )
+  return <CSVUploader />;
 }
 
-export default App
+export default App;
