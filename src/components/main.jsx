@@ -65,6 +65,9 @@ const CSVUploader = () => {
     setFileName2("");
     setResultTable(undefined);
     setHeaderFiles(undefined);
+
+    firstInputRef.current.value = null;
+    secondInputRef.current.value = null;
   };
 
   const calculateResultTable = (firstTable, secondTable) => {
@@ -117,27 +120,32 @@ const CSVUploader = () => {
   ) => {
     try {
       const file = event.target.files[0];
-      setFileNameFunction(file.name);
 
-      const reader = new FileReader();
+      if (file) {
+        setFileNameFunction(file.name);
 
-      reader.onload = (e) => {
-        const content = e.target.result;
+        const reader = new FileReader();
 
-        const [headers, waves] = content.split(`"EX Wavelength/EM Wavelength"`);
+        reader.onload = (e) => {
+          const content = e.target.result;
 
-        if (changeHeaders) {
-          setHeaderFiles(headers);
-        }
+          const [headers, waves] = content.split(
+            `"EX Wavelength/EM Wavelength"`
+          );
 
-        parse(waves, {
-          header: false,
-          skipEmptyLines: true,
-          complete: (results) => setTableDataFunction(results.data),
-        });
-      };
+          if (changeHeaders) {
+            setHeaderFiles(headers);
+          }
 
-      reader.readAsText(file);
+          parse(waves, {
+            header: false,
+            skipEmptyLines: true,
+            complete: (results) => setTableDataFunction(results.data),
+          });
+        };
+
+        reader.readAsText(file);
+      }
     } catch {
       setTableDataFunction(undefined);
     }
